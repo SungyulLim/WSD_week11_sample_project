@@ -37,12 +37,16 @@ public class PostController {
         return "posts/form";
     }
 
+    // Line-By-Line 주석
     @PostMapping("/posts")
     public String create(@Valid @ModelAttribute("postForm") PostForm form, BindingResult errors,
                          @RequestParam(name = "files", required = false) List<MultipartFile> files) {
-        if (errors.hasErrors()) return "posts/form";
-        Long id = posts.create(form, files == null ? List.of() : files);
-        return "redirect:/posts/" + id;
+        // @Validdhk @ModelAttribute를 통해 제목과 내용을 postForm에 담고 DTO에 설정된 검증 조건을 확인한다.
+        // BindingResult errors를 통해서 위에서 검사한 입력값의 오류 여부를 전달받는다.
+        // @RequestParam을 통해서 이름이 files인 입력 요소에서 전송한 첨부파일들을 받는다. 그리고 첨부파일 없이 글을 작성 할 수도 있으므오 필수값으로 설정X
+        if (errors.hasErrors()) return "posts/form"; // 입력값에 오류가 있으면 저장하지 않고 다시 작성화면으로 돌아간다.
+        Long id = posts.create(form, files == null ? List.of() : files); // Service에 게시글과 첨부파일 저장을 요청하고 파일 목록이 null이면 빈 목록으로 바꿔서 전달한다.
+        return "redirect:/posts/" + id; // 저장된 계시글의 상세 주소로 다시 요청하도록 브라우저를 이동시킨다.
     }
 
     @GetMapping("/posts/{id}")
