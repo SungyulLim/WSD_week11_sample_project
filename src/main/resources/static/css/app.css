@@ -44,24 +44,16 @@ h1 {
     padding-bottom: 1rem;
 }
 
-/* 게시판 전체 배경색 */
-body {
-    background-color: #f3f6fc;
+.btn {
+    background-color: #198754;
+    border-color: #198754;
+    color: #ffffff;
 }
 
-/* 게시글과 입력 화면의 카드 모양 */
-.card {
-    border: 1px solid #dce4f0;
-    border-radius: 16px;
-}
-
-/* 주요 버튼 색상 */
-.btn-primary {
-    background-color: #365fc7;
-    border-color: #365fc7;
-}
-
-.btn-primary:hover {
-    background-color: #294b9f;
-    border-color: #294b9f;
+.btn:hover,
+.btn:focus,
+.btn:active {
+    background-color: #146c43;
+    border-color: #146c43;
+    color: #ffffff;
 }
