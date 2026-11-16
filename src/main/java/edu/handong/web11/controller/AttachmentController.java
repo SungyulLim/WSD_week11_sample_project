@@ -38,4 +38,32 @@ public class AttachmentController {
             .body(resource); // 실제 파일을 읽어 전달할 Resource를 응답 본문으로 지정한다.
     }
     // STUDENT TODO: GET /attachments/{id}/view (image preview).
+
+    @GetMapping("/{id}/view")
+    public ResponseEntity<Resource> view(@PathVariable Long id) {
+        Attachment file = attachments.findById(id).orElseThrow(() ->
+                new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "첨부파일이 없습니다."));
+
+        String contentType = file.getContentType();
+
+        boolean isImage = "image/jpeg".equals(contentType) || "image/png".equals(contentType) || "image/gif".equals(contentType);
+
+        if (!isImage) {
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "이미지 파일만 미리보기할 수 있습니다.");
+        }
+
+        Resource resource = storage.load(file);
+
+        String disposition = ContentDisposition.inline()
+                .filename(file.getOriginalFilename(), StandardCharsets.UTF_8)
+                .build()
+                .toString();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, disposition)
+                .header("X-Content-Type-Options", "nosniff")
+                .body(resource);
+    }
 }
